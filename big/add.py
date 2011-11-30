@@ -2,6 +2,7 @@ import hashlib
 import errno
 import os
 import socket
+import subprocess
 import sys
 
 
@@ -13,6 +14,21 @@ def maybe_mkdir(path):
             pass
         else:
             raise
+
+
+def git_cdup(path=None):
+    # '' is understood as an alias for current dir, because that's
+    # what os.path.dirname etc like to give you
+    if path == '':
+        path = None
+    p = subprocess.Popen(
+        args=['git', 'rev-parse', '--show-cdup'],
+        cwd=path,
+        stdout=subprocess.PIPE,
+        )
+    (out, err) = p.communicate()
+    assert err is None
+    return out.rstrip('\n')
 
 
 def add(args):
@@ -36,12 +52,19 @@ def add(args):
                     break
                 h.update(data)
         hashed = h.hexdigest()
-        # TODO not always at top level of git repo
+
         # TODO not always in inited git repo
-        maybe_mkdir('.git/big')
-        # TODO not always at top level of git repo
-        os.symlink('.git/big', '.big')
-        parent = os.path.join('.git', 'big', hashed[:2])
+        cdup = git_cdup()
+        big_dir = os.path.join(cdup, '.git/big')
+        maybe_mkdir(big_dir)
+
+        path_parent = os.path.dirname(path)
+        cdup_from_subdir = git_cdup(path_parent)
+        git_big_from_subdir = os.path.join(cdup_from_subdir, '.git/big')
+        local_big_dir = os.path.join(path_parent, '.big')
+        os.symlink(git_big_from_subdir, local_big_dir)
+
+        parent = os.path.join(big_dir, hashed[:2])
         maybe_mkdir(parent)
         base = hashed[2:] + '.data'
         full = os.path.join(parent, base)
