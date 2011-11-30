@@ -40,3 +40,23 @@ something fun to hack on.
 .. _git-media: https://github.com/schacon/git-media
 .. _Paramiko: http://www.lag.net/paramiko/
 
+
+How does ``big`` work?
+======================
+
+Well, it stores data. Let's say ``repo`` is your Git repository
+(non-bare), you create a file ``jam.mp3`` with the SHA-1 of
+``0123..23``, and run ``big add jam.mp3``. Then you'd have:
+
+- symlink ``jam.mp3`` -> ``.big/01/23..23.data``, added to Git's index
+- symlink ``.big`` -> ``.git/big``
+- directory ``.git/big/``
+- file ``.git/big/01/23..23.data``, with your mp3 in it
+
+The files are managed like this:
+
+- symlink ``jam.mp3``: commit to git
+- symlink ``.big``: put in .gitignore, used only so symlink contents
+  don't have to change
+- directory ``.git/big``: outside of git history, managed with ``big``
+  commands
