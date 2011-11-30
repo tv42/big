@@ -35,6 +35,7 @@ setup(
 
     tests_require=[
         'pytest >=2.1.3',
+        'cram >=0.5',
         ],
 
     entry_points={
