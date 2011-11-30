@@ -31,6 +31,12 @@ def git_cdup(path=None):
     return out.rstrip('\n')
 
 
+def get_umask():
+    mask = os.umask(0)
+    os.umask(mask)
+    return mask
+
+
 def add(args):
     fail = False
     for path in args.paths:
@@ -63,6 +69,9 @@ def add(args):
         git_big_from_subdir = os.path.join(cdup_from_subdir, '.git/big')
         local_big_dir = os.path.join(path_parent, '.big')
         os.symlink(git_big_from_subdir, local_big_dir)
+
+        umask = get_umask()
+        os.chmod(path, 0444 & ~umask)
 
         parent = os.path.join(big_dir, hashed[:2])
         maybe_mkdir(parent)

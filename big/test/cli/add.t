@@ -10,7 +10,7 @@
   $ stat --format='%F %A' .git/big
   directory drwxrwxr-x
   $ stat --format='%F %A' .git/big/47/7b00ed50e036d8a8a367012f994e7227b001df.data
-  regular file -rw-rw-r--
+  regular file -r--r--r--
   $ cat .git/big/47/7b00ed50e036d8a8a367012f994e7227b001df.data
   notreallymusic
   $ cat jam.mp3
