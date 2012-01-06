@@ -1,3 +1,4 @@
+import errno
 import hashlib
 import os
 import socket
@@ -5,14 +6,46 @@ import sys
 
 from . import git
 from .util import (
-    maybe_mkdir,
+    get_hash_from_path,
     get_umask,
+    maybe_mkdir,
     )
 
 
 def add(args):
     fail = False
     for path in args.paths:
+
+        try:
+            dest = os.readlink(path)
+        except OSError as e:
+            if e.errno == errno.EINVAL:
+                # it's not a symlink, that's fine for us
+                pass
+            else:
+                print >>sys.stderr, "{prog}: {path}: {msg}".format(
+                    prog=args.prog,
+                    path=path,
+                    msg=os.strerror(e.errno),
+                    )
+                fail = True
+                continue
+        else:
+            # it is a symlink
+            hash_ = get_hash_from_path(dest)
+            if hash_ is not None:
+                # it's a symlink to a big file already, ignore
+                continue
+            else:
+                # user-controlled symlink
+                print >>sys.stderr, "{prog}: {path}: {msg}".format(
+                    prog=args.prog,
+                    path=path,
+                    msg='Refusing to add a symlink',
+                    )
+                fail = True
+                continue
+
         try:
             f = file(path, 'rb')
         except IOError as e:
