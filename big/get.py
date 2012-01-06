@@ -5,25 +5,11 @@ import socket
 import subprocess
 import sys
 
+from . import git
 from .util import (
     maybe_mkdir,
     get_umask,
     )
-
-
-def git_cdup(path=None):
-    # '' is understood as an alias for current dir, because that's
-    # what os.path.dirname etc like to give you
-    if path == '':
-        path = None
-    p = subprocess.Popen(
-        args=['git', 'rev-parse', '--show-cdup'],
-        cwd=path,
-        stdout=subprocess.PIPE,
-        )
-    (out, err) = p.communicate()
-    assert err is None
-    return out.rstrip('\n')
 
 
 def get_hash_from_path(path):
@@ -149,12 +135,12 @@ def get(args):
             assert ':' not in url, 'TODO'
 
             # TODO not always in inited git repo
-            cdup = git_cdup()
+            cdup = git.cdup()
             big_dir = os.path.join(cdup, '.git/big')
             maybe_mkdir(big_dir)
 
             path_parent = os.path.dirname(path)
-            cdup_from_subdir = git_cdup(path_parent)
+            cdup_from_subdir = git.cdup(path_parent)
             git_big_from_subdir = os.path.join(cdup_from_subdir, '.git/big')
             local_big_dir = os.path.join(path_parent, '.big')
             os.symlink(git_big_from_subdir, local_big_dir)
