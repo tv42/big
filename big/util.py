@@ -12,6 +12,16 @@ def maybe_mkdir(path):
             raise
 
 
+def maybe_symlink(src, dst):
+    try:
+        os.symlink(src, dst)
+    except OSError as e:
+        if e.errno == errno.EEXIST:
+            pass
+        else:
+            raise
+
+
 def get_umask():
     mask = os.umask(0)
     os.umask(mask)

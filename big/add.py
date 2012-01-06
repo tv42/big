@@ -9,6 +9,7 @@ from .util import (
     get_hash_from_path,
     get_umask,
     maybe_mkdir,
+    maybe_symlink,
     )
 
 
@@ -75,7 +76,7 @@ def add(args):
         cdup_from_subdir = git.cdup(path_parent)
         git_big_from_subdir = os.path.join(cdup_from_subdir, '.git/big')
         local_big_dir = os.path.join(path_parent, '.big')
-        os.symlink(git_big_from_subdir, local_big_dir)
+        maybe_symlink(git_big_from_subdir, local_big_dir)
 
         umask = get_umask()
         os.chmod(path, 0444 & ~umask)
