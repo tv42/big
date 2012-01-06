@@ -4,7 +4,10 @@ import socket
 import subprocess
 import sys
 
-from .util import maybe_mkdir
+from .util import (
+    maybe_mkdir,
+    get_umask,
+    )
 
 
 def git_cdup(path=None):
@@ -20,12 +23,6 @@ def git_cdup(path=None):
     (out, err) = p.communicate()
     assert err is None
     return out.rstrip('\n')
-
-
-def get_umask():
-    mask = os.umask(0)
-    os.umask(mask)
-    return mask
 
 
 def add(args):

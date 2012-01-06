@@ -10,3 +10,9 @@ def maybe_mkdir(path):
             pass
         else:
             raise
+
+
+def get_umask():
+    mask = os.umask(0)
+    os.umask(mask)
+    return mask
