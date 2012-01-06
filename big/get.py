@@ -5,15 +5,7 @@ import socket
 import subprocess
 import sys
 
-
-def maybe_mkdir(path):
-    try:
-        os.mkdir(path)
-    except OSError as e:
-        if e.errno == errno.EEXIST:
-            pass
-        else:
-            raise
+from .util import maybe_mkdir
 
 
 def git_cdup(path=None):
