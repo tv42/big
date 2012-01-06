@@ -181,9 +181,8 @@ def make(parser):
     """
     parser.add_argument(
         'paths',
-        metavar='PATH..',
         help='Paths to get',
-        action='append',
-        # not using nargs='+' because argparse makes the usage so ugly
+        metavar='PATH',
+        nargs='+',
         )
     parser.set_defaults(func=get)

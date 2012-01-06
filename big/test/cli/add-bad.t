@@ -1,5 +1,5 @@
   $ big add
-  usage: big add [-h] PATH..
+  usage: big add [-h] PATH [PATH ...]
   big add: error: too few arguments
   [2]
 

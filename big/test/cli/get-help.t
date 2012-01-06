@@ -1,8 +1,8 @@
   $ big get --help
-  usage: big get [-h] PATH..
+  usage: big get [-h] PATH [PATH ...]
   
   positional arguments:
-    PATH..      Paths to get
+    PATH        Paths to get
   
   optional arguments:
     -h, --help  show this help message and exit

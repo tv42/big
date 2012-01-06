@@ -1,5 +1,5 @@
   $ big get
-  usage: big get [-h] PATH..
+  usage: big get [-h] PATH [PATH ...]
   big get: error: too few arguments
   [2]
 
