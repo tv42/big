@@ -1,3 +1,4 @@
+  $ umask 0022
   $ git init --quiet
   $ echo notreallymusic >jam.mp3
   $ sha1sum jam.mp3
@@ -8,7 +9,7 @@
   $ stat --format='%F %N' .big
   symbolic link `.big' -> `.git/big'
   $ stat --format='%F %A' .git/big
-  directory drwxrwxr-x
+  directory drwxr-xr-x
   $ stat --format='%F %A' .git/big/47/7b00ed50e036d8a8a367012f994e7227b001df.data
   regular file -r--r--r--
   $ cat .git/big/47/7b00ed50e036d8a8a367012f994e7227b001df.data
