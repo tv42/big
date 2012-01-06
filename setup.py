@@ -46,6 +46,7 @@ setup(
 
         'big.cli': [
             'add = big.add:make',
+            'get = big.get:make',
             ],
 
         },

@@ -18,3 +18,4 @@
   commands:
     COMMAND     description
       add       Add big file to storage and track in Git
+      get       Get big file from other storage
