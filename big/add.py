@@ -23,7 +23,8 @@ def add(args):
                 )
             fail = True
             continue
-        else:
+
+        with f:
             h = hashlib.sha1()
             while True:
                 data = f.read(8192)
