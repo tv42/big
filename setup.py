@@ -47,6 +47,7 @@ setup(
         'big.cli': [
             'add = big.add:make',
             'get = big.get:make',
+            'fix-missing-links = big.fix_missing_links:make',
             ],
 
         },
