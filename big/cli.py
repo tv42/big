@@ -1,4 +1,5 @@
 import argparse
+import operator
 import pkg_resources
 
 
@@ -11,7 +12,8 @@ def get_parser():
         metavar='COMMAND',
         help='description',
         )
-    for ep in pkg_resources.iter_entry_points('big.cli'):
+    entrypoints = pkg_resources.iter_entry_points('big.cli')
+    for ep in sorted(entrypoints, key=operator.attrgetter('name')):
         fn = ep.load()
         p = sub.add_parser(ep.name, help=fn.__doc__)
         # ugly kludge but i really want to have a nice way to access
