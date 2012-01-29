@@ -8,6 +8,7 @@ from . import git
 from .util import (
     get_hash_from_path,
     get_umask,
+    maybe_link,
     maybe_mkdir,
     maybe_symlink,
     )
@@ -85,7 +86,7 @@ def add(args):
         maybe_mkdir(parent)
         base = hashed[2:] + '.data'
         full = os.path.join(parent, base)
-        os.link(path, full)
+        maybe_link(path, full)
         tmp = '{path}.{host}_{pid}.tmp'.format(
             path=path,
             host=socket.gethostname(),

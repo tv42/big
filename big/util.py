@@ -22,6 +22,16 @@ def maybe_symlink(src, dst):
             raise
 
 
+def maybe_link(src, dst):
+    try:
+        os.link(src, dst)
+    except OSError as e:
+        if e.errno == errno.EEXIST:
+            pass
+        else:
+            raise
+
+
 def get_umask():
     mask = os.umask(0)
     os.umask(mask)
