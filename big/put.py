@@ -2,9 +2,21 @@ import errno
 import os
 import sys
 
+from . import git
 from .util import (
     get_hash_from_path,
     )
+
+
+def get_putter(url):
+    # TODO support remote urls
+    if not url.startswith('/'):
+        return None
+
+    def _put(hash_):
+        raise NotImplementedError('TODO WIP')
+
+    return _put
 
 
 def put(args):
@@ -38,6 +50,18 @@ def put(args):
                 prog=args.prog,
                 path=path,
                 msg='Not a big file',
+                )
+            fail = True
+            continue
+
+        url = git.remote_url(args.remote)
+
+        assert url != ''
+        putter = get_putter(url)
+        if putter is None:
+            print >>sys.stderr, "{prog}: {msg}".format(
+                prog=args.prog,
+                msg='No remotes with supported schemes',
                 )
             fail = True
             continue
