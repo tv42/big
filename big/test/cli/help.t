@@ -21,3 +21,4 @@
       fix-missing-links
                        Fix missing .big links
       get              Get big file from other storage
+      put              Put a copy of big file to other storage
