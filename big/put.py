@@ -1,5 +1,51 @@
+import errno
+import os
+import sys
+
+from .util import (
+    get_hash_from_path,
+    )
+
+
 def put(args):
-    raise NotImplementedError('TODO WIP')
+    fail = False
+    for path in args.paths:
+        try:
+            dest = os.readlink(path)
+        except OSError as e:
+            if e.errno == errno.ENOENT:
+                print >>sys.stderr, "{prog}: {path}: {msg}".format(
+                    prog=args.prog,
+                    path=path,
+                    msg=os.strerror(e.errno),
+                    )
+                fail = True
+                continue
+            elif e.errno == errno.EINVAL:
+                print >>sys.stderr, "{prog}: {path}: {msg}".format(
+                    prog=args.prog,
+                    path=path,
+                    msg='Not a big file (not a symlink)',
+                    )
+                fail = True
+                continue
+            else:
+                raise
+
+        hash_ = get_hash_from_path(dest)
+        if hash_ is None:
+            print >>sys.stderr, "{prog}: {path}: {msg}".format(
+                prog=args.prog,
+                path=path,
+                msg='Not a big file',
+                )
+            fail = True
+            continue
+
+        raise NotImplementedError('TODO WIP')
+
+    if fail:
+        return 1
 
 
 def make(parser):
