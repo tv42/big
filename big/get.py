@@ -27,21 +27,6 @@ def git_list_remotes():
     return out.rstrip('\n').split('\n')
 
 
-def git_remote_url(remote):
-    p = subprocess.Popen(
-        args=[
-            'git',
-            'config',
-            '--',
-            'remote.{remote}.url'.format(remote=remote),
-            ],
-        stdout=subprocess.PIPE,
-        )
-    (out, err) = p.communicate()
-    assert err is None
-    return out.rstrip('\n')
-
-
 def get_fetcher(url):
     # TODO support remote urls
     if not url.startswith('/'):
@@ -111,7 +96,7 @@ def get(args):
         acceptable = False
         found = False
         for remote in git_list_remotes():
-            url = git_remote_url(remote)
+            url = git.remote_url(remote)
 
             assert url != ''
             fetcher = get_fetcher(url)
