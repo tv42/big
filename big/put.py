@@ -54,19 +54,39 @@ def put(args):
             fail = True
             continue
 
-        url = git.remote_url(args.remote)
+        try:
+            f_in = file(path, 'rb')
+        except IOError as e:
+            if e.errno == errno.ENOENT:
+                print >>sys.stderr, "{prog}: {path}: {msg}".format(
+                    prog=args.prog,
+                    path=path,
+                    msg='No local copy of big file',
+                    )
+                fail = True
+                continue
+            else:
+                raise
 
-        assert url != ''
-        putter = get_putter(url)
-        if putter is None:
-            print >>sys.stderr, "{prog}: {msg}".format(
-                prog=args.prog,
-                msg='No remotes with supported schemes',
-                )
-            fail = True
-            continue
+        with f_in:
+            url = git.remote_url(args.remote)
 
-        raise NotImplementedError('TODO WIP')
+            assert url != ''
+            putter = get_putter(url)
+            if putter is None:
+                print >>sys.stderr, "{prog}: {msg}".format(
+                    prog=args.prog,
+                    msg='No remotes with supported schemes',
+                    )
+                fail = True
+                continue
+
+            f_out = putter(hash_=hash_)
+            if f_out is None:
+                # remote already has it
+                continue
+
+            raise NotImplementedError('TODO WIP foo')
 
     if fail:
         return 1
