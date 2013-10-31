@@ -9,8 +9,8 @@
   $ big add jam.mp3
   $ big add groove.mp3
   $ stat --format='%F %N' jam.mp3 groove.mp3
-  symbolic link `jam.mp3' -> `.big/47/7b00ed50e036d8a8a367012f994e7227b001df.data'
-  symbolic link `groove.mp3' -> `.big/d8/9802139f25443e90e3bb959b0001d83e2e6dff.data'
+  symbolic link 'jam.mp3' -> '.big/47/7b00ed50e036d8a8a367012f994e7227b001df.data'
+  symbolic link 'groove.mp3' -> '.big/d8/9802139f25443e90e3bb959b0001d83e2e6dff.data'
   $ stat --format='%F %A' .git/big/47/7b00ed50e036d8a8a367012f994e7227b001df.data
   regular file -r--r--r--
   $ stat --format='%F %A' .git/big/d8/9802139f25443e90e3bb959b0001d83e2e6dff.data
