@@ -12,7 +12,11 @@ def pytest_generate_tests(metafunc):
                  if not f.startswith('.')
                  and not f.startswith('_')
                  and f.endswith('.t')]
-        metafunc.parametrize('cramtest', files)
+        # py.test -k command line argument can't filter by "get.t"
+        # because of its botched logic of splitting at periods and
+        # matching substrings, to avoid the period to work around that
+        ids = [fn.replace('.', '_') for fn in files]
+        metafunc.parametrize('cramtest', files, ids=ids)
 
 
 def test_cram(cramtest, tmpdir, monkeypatch):
