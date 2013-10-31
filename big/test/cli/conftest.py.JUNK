@@ -1,0 +1,87 @@
+# import cram
+# import os
+# import pytest
+# import pkg_resources
+# import sys
+
+# from . import fdcapture
+
+
+# def pytest_collect_file(path, parent):
+#     if path.ext == ".t":
+#         return CramFile(
+#             fspath=path,
+#             parent=parent,
+#             )
+
+
+# # TODO i wish i didn't need pytest.Module
+# class CramFile(pytest.Module):
+#     obj = None
+
+#     def collect(self):
+#         return [
+#             CramFunction(
+#                 name=str(self.fspath),
+#                 callobj=_cram,
+#                 parent=self,
+#                 ),
+#             ]
+
+
+# def pytest_funcarg__fspath(request):
+#     return request.fspath
+
+
+# class CramFailure(Exception):
+#     pass
+
+
+# def _cram(fspath, tmpdir, monkeypatch):
+#     # pytest you are too opinionated (or, i just disagree)
+#     tmpdir = str(tmpdir)
+
+#     bindir = os.path.join(tmpdir, 'bin')
+#     os.mkdir(bindir)
+
+#     dist = pkg_resources.get_distribution('big')
+#     for name in dist.get_entry_map(group='console_scripts'):
+#         with file(os.path.join(bindir, name), 'w') as f:
+#             f.write("""\
+# #!{python}
+# import sys
+# from pkg_resources import load_entry_point
+
+# if __name__ == '__main__':
+#     sys.exit(
+#         load_entry_point('big', 'console_scripts', '{name}')()
+#     )
+#     """.format(
+#                     python=sys.executable,
+#                     name=name,
+#                     ))
+#             os.fchmod(f.fileno(), 0755)
+
+#     monkeypatch.setenv('PATH', bindir, prepend=':')
+#     cramdir = os.path.join(tmpdir, 'cram')
+#     os.mkdir(cramdir)
+#     with fdcapture.capture('stdout') as out, \
+#             fdcapture.capture('stderr') as err:
+#         failed = cram.run(
+#             paths=[str(fspath)],
+#             tmpdir=cramdir,
+#             verbose=True,
+#             )
+
+#     err = err.read()
+#     if err:
+#         pytest.fail('Cram internal error:\n' + err)
+#     if failed:
+#         raise CramFailure(out.read())
+
+
+# class CramFunction(pytest.Function):
+#     def repr_failure(self, excinfo):
+#         if isinstance(excinfo.value, CramFailure):
+#             return 'Cram fail:\n%s' % excinfo.value.args[0]
+#         return super(CramFunction, self).repr_failure(excinfo)

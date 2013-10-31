@@ -1,0 +1,20 @@
+import contextlib
+import sys
+import tempfile
+
+
+@contextlib.contextmanager
+def capture(attr='stdout'):
+    """
+    This is better than pytest's ``capsys`` because this let's you
+    control exactly what output is captured; capsys destroys the
+    convenience of "print debugging".
+    """
+    old = getattr(sys, attr)
+    new = tempfile.SpooledTemporaryFile()
+    try:
+        setattr(sys, attr, new)
+        yield new
+    finally:
+        setattr(sys, attr, old)
+        new.seek(0)

@@ -1,0 +1,27 @@
+#!/bin/sh
+set -e
+
+. git-sh-setup
+
+git ls-files -s -- '*.mp3' | while read -r mode sha1 stage file; do
+    case "$mode" in
+	"100644")
+	    install -d -m0755 -- "$(dirname -- "$file")/.big"
+
+	    # TODO after it's already in index is too late! (that's
+	    # ok, that's why you use "git big add" instead of "git
+	    # add", this is just fixing human mistakes)
+
+	    # TODO this is not guaranteed to match index.. if it's
+	    # already in there, re-extract it from git's object
+	    # database, then replace with symlink in the index only
+	    # (then replace real file with symlink iff sha1 matches?)
+
+	    mv -- "$file" "$(dirname -- "$file")/.big/$sha1.data"
+	    ln -s -- ".big/$sha1.data" "$file"
+	    git update-index -- "$file"
+	    #--cacheinfo 120000
+	    ;;
+    esac
+done
+install -d -m0755 .big

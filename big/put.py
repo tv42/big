@@ -1,11 +1,30 @@
 import errno
 import os
+# import shutil
+# import socket
+# import subprocess
 import sys
 
 from . import git
 from .util import (
     get_hash_from_path,
+#     get_umask,
+#     maybe_mkdir,
+#     maybe_symlink,
     )
+
+
+# def git_list_remotes():
+#     p = subprocess.Popen(
+#         args=[
+#             'git',
+#             'remote',
+#             ],
+#         stdout=subprocess.PIPE,
+#         )
+#     (out, err) = p.communicate()
+#     assert err is None
+#     return out.rstrip('\n').split('\n')
 
 
 def get_putter(url):
@@ -14,6 +33,25 @@ def get_putter(url):
         return None
 
     def _put(hash_):
+        # path = os.path.join(
+        #     url,
+        #     '.git',
+        #     'big',
+        #     hash_[:2],
+        #     '{h}.data'.format(h=hash_[2:]),
+        #     )
+        # fd = os.open(path, os.O_CREAT|os.O_EXCL|os.O_WRONLY)
+
+        # try:
+        #     f = file(path, 'rb')
+        # except IOError as e:
+        #     if e.errno == errno.ENOENT:
+        #         return None
+        #     else:
+        #         raise
+        # else:
+        #     return f
+
         raise NotImplementedError('TODO WIP')
 
     return _put
@@ -87,6 +125,37 @@ def put(args):
                 continue
 
             raise NotImplementedError('TODO WIP foo')
+
+    #         # TODO not always in inited git repo
+    #         cdup = git.cdup()
+    #         big_dir = os.path.join(cdup, '.git/big')
+    #         maybe_mkdir(big_dir)
+
+    #         path_parent = os.path.dirname(path)
+    #         cdup_from_subdir = git.cdup(path_parent)
+    #         git_big_from_subdir = os.path.join(cdup_from_subdir, '.git/big')
+    #         local_big_dir = os.path.join(path_parent, '.big')
+    #         maybe_symlink(git_big_from_subdir, local_big_dir)
+
+    #         parent = os.path.join(big_dir, hash_[:2])
+    #         maybe_mkdir(parent)
+    #         base = hash_[2:] + '.data'
+    #         full = os.path.join(parent, base)
+    #         tmp = os.path.join(
+    #             parent,
+    #             '{hrest}.{host}_{pid}.tmp'.format(
+    #                 hrest=hash_[2:],
+    #                 host=socket.gethostname(),
+    #                 pid=os.getpid(),
+    #                 ),
+    #             )
+    #         umask = get_umask()
+    #         with file(tmp, 'wb') as f_out:
+    #             os.fchmod(f_out.fileno(), 0444 & ~umask)
+    #             shutil.copyfileobj(f_in, f_out)
+    #         os.rename(tmp, full)
+
+    #     if not acceptable:
 
     if fail:
         return 1

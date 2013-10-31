@@ -1,0 +1,65 @@
+* TODO for readme
+You could tell ``git big`` to apply to all ``*.mp3`` files by adding a
+file ``.big.yaml``::
+
+	groups:
+	  - glob: *.mp3
+
+* TODO command ideas
+git big unadd [PATH..]
+git big sync [REMOTES..]
+
+git big drop
+git big put  (= sync --without-me + drop --if-safe)
+git big unused
+git big cleanup
+
+* TODO for readme
+To avoid accidentally ``git add``\ ing big files, you should add the
+relevant file name patterns to ``.gitignore``, and then re-include
+them in ``.bigignore`` with ``! *.mp3``. TODO that's not nice either,
+they disappear from git st :(  instead use a pre-commit that prevents
+
+* TODO "big init" (or some big foo) to create .big entries, e.g. after a pull
+
+
+* TODO git remote url parsing
+# int is_urlschemechar(int first_flag, int ch)
+# {
+#         /*
+#          * The set of valid URL schemes, as per STD66 (RFC3986) is
+#          * '[A-Za-z][A-Za-z0-9+.-]*'. But use sightly looser check
+#          * of '[A-Za-z0-9][A-Za-z0-9+.-]*' because earlier version
+#          * of check used '[A-Za-z0-9]+' so not to break any remote
+#          * helpers.
+#          */
+#         int alphanumeric, special;
+#         alphanumeric = ch > 0 && isalnum(ch);
+#         special = ch == '+' || ch == '-' || ch == '.';
+#         return alphanumeric || (!first_flag && special);
+# }
+
+        # if ('::' in url
+        #     or url.startswith((
+        #             'http://', 'https://', 'ftp://', 'ftps://',
+        #             'git://', 'rsync://',
+        #             ))
+        #     ):
+        #     print >>sys.stderr, "{prog}: {msg}: {url}".format(
+        #         prog=args.prog,
+        #         msg='Cannot handle url',
+        #         url=url,
+        #         )
+        #     return 1
+
+        #    For local repositories, also supported by git natively, the following syntaxes may be used:
+        #    - /path/to/repo.git/
+        #    - file:///path/to/repo.git/
+
+        #    When git doesn't know how to handle a certain transport
+        #    protocol, it attempts to use the remote-<transport> remote
+        #    helper, if one exists. To explicitly request a remote helper,
+        #    the following syntax may be used:
+
+        #    - <transport>::<address>
+
