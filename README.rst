@@ -49,7 +49,10 @@ Well, it stores data. Let's say ``repo`` is your Git repository
 ``0123..23``, and run ``big add jam.mp3``. Then you'd have:
 
 - symlink ``jam.mp3`` -> ``.big/01/23..23.data``, added to Git's index
-- symlink ``.big`` -> ``.git/big``
+- symlink ``.big`` -> ``../.big`` if ``jam.mp3`` was in a subdir of
+  the repo
+- at the top level of the repo, symlink ``.big`` -> ``.git/big``
+  (or to ``$GIT_COMMON_DIR/big`` if using git worktrees)
 - directory ``.git/big/``
 - file ``.git/big/01/23..23.data``, with your mp3 in it
 

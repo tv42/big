@@ -69,13 +69,19 @@ def add(args):
         hashed = h.hexdigest()
 
         # TODO not always in inited git repo
-        cdup = git.cdup()
-        big_dir = os.path.join(cdup, '.git/big')
+        git_dir = git.git_common_dir()
+        big_dir = os.path.join(git_dir, 'big')
         maybe_mkdir(big_dir)
+
+        cdup = git.cdup()
+        top_big_link = os.path.join(cdup, '.big')
+        git_dir_relative_to_root = git.git_common_dir(cdup)
+        big_dir_relative_to_root = os.path.join(git_dir_relative_to_root, 'big')
+        maybe_symlink(big_dir_relative_to_root, top_big_link)
 
         path_parent = os.path.dirname(path)
         cdup_from_subdir = git.cdup(path_parent)
-        git_big_from_subdir = os.path.join(cdup_from_subdir, '.git/big')
+        git_big_from_subdir = os.path.join(cdup_from_subdir, '.big')
         local_big_dir = os.path.join(path_parent, '.big')
         maybe_symlink(git_big_from_subdir, local_big_dir)
 
